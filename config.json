@@ -1,0 +1,83 @@
+{
+  "max_questions": 20,
+
+  "categories": {
+    "animals": {
+      "example_question": "Is it a mammal?",
+      "words": [
+        "lion", "whale", "chameleon", "kangaroo", "koala", 
+        "eagle", "sloth", "bear", "penguin", "capybara", 
+        "leopard", "monkey", "elephant", "cheetah", "shark", 
+        "frog", "panda", "otter", "tiger", "wolf", 
+        "zebra", "giraffe", "dolphin", "fox", "rabbit", 
+        "deer", "hippo", "rhino", "camel", "owl"
+      ]
+    },
+
+    "countries": {
+      "example_question": "Is it located in Europe?",
+      "words": [
+        "japan", "brazil", "egypt", "canada", "australia", 
+        "madagascar", "iceland", "switzerland", "india", "mexico",
+        "usa", "uk", "france", "germany", "china", 
+        "italy", "spain", "argentina", "russia", "south korea", 
+        "south africa", "new zealand", "norway", "thailand", "morocco", 
+        "greece", "vietnam", "kenya", "peru", "turkey", 
+        "ireland", "costa rica", "mongolia", "indonesia", "fiji",
+        "netherlands", "sweden", "portugal", "colombia", "chile",
+        "saudi arabia", "nigeria", "singapore", "malaysia",
+        "philippines", "ukraine", "poland", "austria", "belgium",
+        "denmark", "finland", "cuba", "jamaica", "panama",
+        "croatia", "pakistan", "iran", "nepal", "ghana"
+      ]
+    },
+    
+    "football_players": {
+      "example_question": "Has this player won a Ballon d'Or?",
+      "words": [
+        "lionel messi", "cristiano ronaldo", "pelé", "diego maradona", "zinedine zidane",
+        "ronaldinho", "johan cruyff", "ronaldo nazário", "kylian mbappé", "erling haaland",
+        "neymar jr", "luka modrić", "kevin de bruyne", "mohamed salah", "karim benzema",
+        "robert lewandowski", "harry kane", "thierry henry", "david beckham", "zlatan ibrahimović",
+        "andrés iniesta", "xavi hernández", "paolo maldini", "gianluigi buffon", "franz beckenbauer",
+        "michel platini", "george best", "bobby charlton", "gerd müller", "ronald koeman"
+      ]
+    },
+
+    "professions": {
+      "example_question": "Does this job typically require wearing a uniform or specialized gear?",
+      "words": [
+        "doctor", "teacher", "firefighter", "astronaut", "pilot",
+        "chef", "police officer", "lawyer", "engineer", "farmer",
+        "artist", "musician", "nurse", "scientist", "actor",
+        "architect", "journalist", "dentist", "programmer", "carpenter",
+        "mechanic", "electrician", "plumber", "baker", "veterinarian",
+        "athlete", "librarian", "photographer", "barber", "flight attendant"
+      ]
+    },
+
+    "food": {
+      "example_question": "Is this food traditionally served hot?",
+      "words": [
+        "pizza", "burger", "sushi", "pasta", "taco",
+        "ice cream", "chocolate", "pancake", "salad", "soup",
+        "sandwich", "steak", "fries", "donut", "croissant",
+        "cheese", "apple", "banana", "chicken nuggets", "rice",
+        "popcorn", "waffle", "curry", "ramen", "hot dog",
+        "watermelon", "cookie", "lasagna", "omelet", "burrito"
+      ]
+    },
+
+    "everyday_objects": {
+      "example_question": "Does this object require electricity or batteries to function?",
+      "words": [
+        "smartphone", "laptop", "keys", "wallet", "umbrella",
+        "toothbrush", "backpack", "eyeglasses", "watch", "shoes",
+        "pillow", "blanket", "mug", "mirror", "scissors",
+        "pen", "book", "headphones", "remote control", "clock",
+        "hammer", "flashlight", "towel", "water bottle", "calculator",
+        "guitar", "bicycle", "chair", "lamp", "comb"
+      ]
+    }
+  }
+}
