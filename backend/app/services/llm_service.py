@@ -115,23 +115,28 @@ def ask_llm(task_type: LLMTask, **kwargs) -> tuple[str, str]:
             temperature=0.0
         )
         
-        # Clean and parse the response payload safely
         raw_content = response.choices[0].message.content or "{}"
         parsed = json.loads(raw_content)
 
-        valid_responses = {"yes", "no", "error"} if task_type == LLMTask.YES_NO_QUESTION else {"yes", "no"}
-
-        decision = str(parsed.get("response", "Error")).strip().lower()
+        raw_decision = str(parsed.get("response", "Error")).strip().lower()
         analysis = str(parsed.get("analysis", "No log provided."))
 
-        if decision not in valid_responses:
-            current_app.logger.warning(
-                f"Unexpected LLM response: {decision}"
-            )
-            decision = "error" if task_type == LLMTask.YES_NO_QUESTION else "no"
+        if task_type == LLMTask.YES_NO_QUESTION:
+            if raw_decision not in {"yes", "no", "error"}:
+                current_app.logger.warning(f"Unexpected LLM response: {raw_decision}")
+                decision = "Error"
+            else:
+                decision = raw_decision
+        else:
+            if raw_decision not in {"yes", "no"}:
+                current_app.logger.warning(f"Unexpected LLM response: {raw_decision}")
+                decision = "no"
+            else:
+                decision = raw_decision
 
         return decision, analysis
             
     except Exception as e:
         current_app.logger.error(f"LLM Processing Exception: {e}")
-        return "error", f"Failed processing due to connection or structural error: {e}"
+        fallback_decision = "error" if task_type == LLMTask.YES_NO_QUESTION else "no"
+        return fallback_decision, f"Failed processing due to connection or structural error: {e}"
