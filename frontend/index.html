@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 20 Questions</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-wrapper">
+        <header>
+            <h1>🎯 AI 20 Questions</h1>
+            <p class="subtitle">Can you beat the AI before your questions run out?</p>
+        </header>
+
+        <main id="setup-container" class="card">
+            <h2>Select a Category to Start</h2>
+            <div id="category-grid" class="category-grid"></div>
+        </main>
+
+        <main id="game-container" class="card hidden">
+            <div class="game-meta">
+                <span id="category-badge" class="badge">Category: Food</span>
+                <span id="turn-counter" class="badge">Questions Used: 0 / 20</span>
+            </div>
+
+            <div id="chat-display" class="chat-display"></div>
+
+            <div id="input-section" class="input-section">
+                <form id="question-form" class="input-group">
+                    <input type="text" id="question-input" placeholder="Ask a Yes/No question..." required>
+                    <button type="submit" class="btn btn-primary" id="ask-btn">Ask</button>
+                </form>
+
+                <div class="divider"><span>OR MAKE A GUESS</span></div>
+
+                <form id="guess-form" class="input-group">
+                    <input type="text" id="guess-input" placeholder="Guess the exact word..." required>
+                    <button type="submit" class="btn btn-accent" id="guess-btn">Guess</button>
+                </form>
+            </div>
+
+            <div id="game-over-panel" class="game-over-panel hidden">
+                <hr class="panel-divider">
+                <h2 id="end-status-heading">Game Over</h2>
+                <p id="end-message-text"></p>
+                
+                <div class="answer-reveal hidden" id="reveal-box">
+                    <span class="reveal-label">The secret answer was:</span>
+                    <span class="reveal-word" id="secret-word-display"></span>
+                </div>
+            
+                <div class="toggle-container">
+                    <div class="toggle-label-group">
+                        <span class="toggle-emoji">🧠</span>
+                        <div>
+                            <span class="toggle-title">Examine AI Reasoning</span>
+                            <p class="toggle-subtitle">Reveal the LLM's internal match evaluation</p>
+                        </div>
+                    </div>
+                    <label class="ios-switch">
+                        <input type="checkbox" id="analysis-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            
+                <button id="restart-btn" class="btn btn-primary full-width">Play Another Match</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
