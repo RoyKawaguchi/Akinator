@@ -5,10 +5,6 @@ from dotenv import load_dotenv
 base_dir = os.path.dirname(os.path.abspath(__file__))
 env_path = os.path.join(base_dir, '..', '.env')
 
-# 🎯 DEBUG PRINTS (Temporary)
-print(f"DEBUG: Looking for .env file at: {os.path.abspath(env_path)}")
-print(f"DEBUG: Does .env file exist there? {os.path.exists(env_path)}")
-
 if os.path.exists(env_path):
     load_dotenv(env_path)
 

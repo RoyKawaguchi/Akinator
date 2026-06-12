@@ -1,3 +1,5 @@
+import os
+import json
 import uuid
 import random
 from flask import Blueprint, request, jsonify, current_app
@@ -7,20 +9,35 @@ from app.services.llm_service import ask_llm, LLMTask
 # Create a Flask Blueprint for our API routes
 api_bp = Blueprint("api", __name__)
 
-# TODO: Integrate with config.json
-MOCK_CATEGORIES = {
-    "food": ["donut", "lasagna", "burger", "sushi"],
-    "animals": ["kangaroo", "beagle", "penguin", "axolotl"]
-}
+APP_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_PATH = os.path.join(APP_DIR, "config.json")
 
-@api_bp.route("/api/game/start", methods=["POST"])
+with open(CONFIG_PATH, "r") as f:
+    config_data = json.load(f)
+
+MOCK_CATEGORIES = config_data["categories"]
+
+print("Categories: ", MOCK_CATEGORIES.keys())
+
+@api_bp.route("/game/categories", methods=["GET", "OPTIONS"])
+def get_categories():
+    """
+    Returns a list of available game categories to the frontend.
+    """
+    # Just grab the keys safely from the pre-loaded global dictionary
+    categories_list = list(MOCK_CATEGORIES.keys())
+    
+    return jsonify({
+        "categories": categories_list
+    }), 200
+
+@api_bp.route("/game/start", methods=["POST"])
 def start_game():
     """
     Initializes a completely new game record.
     Expects JSON input: { "category": "food" }
     Returns a JSON {"game_id", "category", "max_questions", "game_stage"} 201 if successful
     """
-
     data = request.get_json() or {}
     category = data.get("category", "").strip().lower()
     
@@ -28,7 +45,7 @@ def start_game():
         return jsonify({"error": f"Invalid category. Choose from: {list(MOCK_CATEGORIES.keys())}"}), 400
     
     # Choose secret word and generate unique ID
-    secret_word = random.choice(MOCK_CATEGORIES[category])
+    secret_word = random.choice(MOCK_CATEGORIES[category]["words"])
     game_id = str(uuid.uuid4())
     
     new_game_document = {
@@ -59,7 +76,7 @@ def start_game():
         return jsonify({"error": "Failed to create game session due to an internal server error."}), 500
     
 
-@api_bp.route("/api/game/question", methods=["POST"])
+@api_bp.route("/game/question", methods=["POST"])
 def execute_turn():
     """
     Processes a single yes/no question turn.
@@ -146,7 +163,7 @@ def execute_turn():
         current_app.logger.error(f"Database update crash during question processing: {e}")
         return jsonify({"error": "Internal server database modification failure."}), 500
     
-@api_bp.route("/api/game/guess", methods=["POST"])
+@api_bp.route("/game/guess", methods=["POST"])
 def submit_guess():
     data = request.get_json() or {}
     game_id = data.get("game_id", "").strip()
@@ -227,3 +244,30 @@ def submit_guess():
     except Exception as e:
         current_app.logger.error(f"Database update crash during guess resolution: {e}")
         return jsonify({"error": "Internal server database modification failure."}), 500
+    
+@api_bp.route("/game/<game_id>/analysis", methods=["GET", "OPTIONS"])
+def get_game_analysis(game_id):
+    """
+    Fetches the full chat history including hidden reasoning strings 
+    for post-game review. Only call this when the game is over!
+    """
+    try:
+        # 1. Fetch using your existing connection helper utility
+        games_collection = get_games_collection()
+        game_record = games_collection.find_one({"_id": game_id})
+        
+        if not game_record:
+            return jsonify({"error": "Game session not found"}), 404
+            
+        # 2. Safety Check: Lock reasoning strings until game stage hits GAME_OVER
+        if game_record.get("game_stage") != "GAME_OVER":
+            return jsonify({"error": "Analysis is locked until the match completely concludes."}), 403
+
+        # 3. Securely return the full history array containing the analytical weights
+        return jsonify({
+            "chat_history": game_record.get("chat_history", [])
+        }), 200
+        
+    except Exception as e:
+        current_app.logger.error(f"Error fetching game analysis history for session {game_id}: {e}")
+        return jsonify({"error": "Failed to retrieve analytical logs due to an internal server error."}), 500
