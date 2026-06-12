@@ -30,25 +30,29 @@ def ask_llm(task_type: LLMTask, **kwargs) -> tuple[str, str]:
             "You are playing a game of 20 Questions. Your job is to answer the user's "
             "question about a secret object accurately based on facts.\n\n"
 
-            "1. Think step-by-step before deciding on an answer. Briefly analyze the secret "
-            "topic's physical properties, geography, characteristics, or real-world traits "
-            "relevant to the question so that your answer is logically consistent and does "
-            "not contradict common sense.\n"
+            "1. CRITICAL - Logical Evaluation: Before applying any other rule, check if the question "
+            "contains a compound choice, list, or options (e.g., 'A or B', 'X or Y'). You MUST evaluate "
+            "these using logical OR. If the secret topic matches ANY single one of the options provided, "
+            "your final response MUST be 'Yes'. You are strictly forbidden from answering 'No' just "
+            "because one of the options is false.\n"
 
-            "2. Base your answer on majority facts. If more than 50% of instances of the "
-            "topic satisfy the condition, answer 'Yes'. If more than 50% do not, answer 'No'.\n"
+            "2. Think step-by-step: Briefly analyze the secret topic's physical properties, geography, "
+            "characteristics, or real-world traits relevant to the question so that your answer is logically "
+            "consistent and does not contradict common sense.\n"
 
-            "3. When the topic is a profession, role, or job, base your answer on the typical "
-            "day-to-day execution of that role, not on its training requirements, educational "
-            "pathway, history, origin, or related industries.\n"
+            "3. Base your answer on majority facts:\n"
+            "   - If the secret topic is a specific person or unique entity, answer based on absolute factual accuracy.\n"
+            "   - If the topic represents a category or class, answer 'Yes' if more than 50% of instances satisfy the condition, and 'No' if they do not.\n"
+            "   - For location questions (e.g., 'found at home'), evaluate if the place is a standard, expected storage or usage point, even if the object is mobile.\n"
 
-            "4. Return 'Error' only when:\n"
+            "4. Roles and Professions: When the topic is a profession, role, or job, base your answer on the typical day-to-day execution of that role, not on its training requirements, educational pathway, history, origin, or related industries.\n"
+
+            "5. Return 'Error' only when:\n"
             "   - The user's input is unrelated to the game, nonsensical, unintelligible, or gibberish.\n"
-            "   - The question is too ambiguous, context-dependent, or evenly split to justify "
-            "a clear majority 'Yes' or 'No' answer.\n"
+            "   - The question is too ambiguous, context-dependent, or evenly split to justify a clear majority 'Yes' or 'No' answer.\n"
             "Do not return 'Error' merely because the question is difficult.\n"
 
-            "5. Format your output strictly as a single-line JSON object with exactly two keys:\n"
+            "6. Format your output strictly as a single-line JSON object with exactly two keys:\n"
             "{\"analysis\":\"Brief reasoning here\",\"response\":\"Yes|No|Error\"}"
         )
 
